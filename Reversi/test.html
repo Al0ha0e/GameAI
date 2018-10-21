@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html"; charset="utf-8"> 
+        <script type="text/javascript" src="./src/GameBase.js"></script>
+        <script type="text/javascript" src="./src/Bot.js"></script>
+        <script type="text/javascript" src="./src/board.js"></script>
+    </head>
+<h1>黑白棋游戏</h1>
+<form>
+    <h2>游戏设置</h2>
+    <input type="checkbox" name="UseBot" onclick = "setBot(this);">人机模式
+    <select>
+            <option value="pvp">玩家对战玩家</option>
+            <option value="pve">玩家对战电脑</option>
+            <option value="eve">电脑对战电脑</option>
+    </select>
+    <input type="checkbox" name="UseBlack" onclick="setFirst(this);">人类先手
+    计时器
+    <select>
+        <option value="one minute">一分钟</option>
+        <option value="two minutes">两分钟</option>
+        <option value="five minutes">五分钟</option>
+        <option value="infinity">不限时</option>
+    </select>
+    <button type="button" onclick="restart();">重新开始</button>
+    <br/>
+    <body onload="getInstance();">
+        <canvas id="Board" width="640" height="640" onclick="canvasOnClick();"></canvas>
+    </body>
+</form>
+<script>
+    var gbInstance;
+    var botInstance;
+    var humanFirst = false;
+    var usb=false;
+    var mtt=3600;
+    function getInstance()
+    {
+        gbInstance = new gameBase();
+        botInstance = new bot("naive",gbInstance);
+    }
+    function restart()
+    {
+        gbInstance.initGame(humanFirst ? "HumanTurn" : "BotTurn",usb,mtt);
+        if(gbInstance.UseBot)
+        {
+            if(!humanFirst) setTimeout(botInstance.botTurn.bind(this.botInstance),900); 
+        }
+    }
+    function setFirst(checkbox)
+    {
+        humanFirst = checkbox.checked;
+    }
+    function setBot(checkbox)
+    {
+        usb = checkbox.checked;
+    }
+    function canvasOnClick(event)//main
+    {
+        let e = event || window.event;
+        let xPos = Math.floor(e.clientX/80);
+        let yPos = Math.floor(e.clientY/80)-2;
+        if(xPos>=0 && xPos<=7 && yPos>=0 && yPos<=7)
+        {
+            if(gbInstance.UseBot)
+            {
+                if(gbInstance.state=="HumanTurn")
+                {
+                    if(gbInstance.digitalBoard.canSet(xPos,yPos,gbInstance.currentColor)) 
+                    {
+                        gbInstance.digitalBoard.set(xPos,yPos,gbInstance.currentColor);
+                        gbInstance.renderState();
+                        if(gbInstance.isEndUp()){gbInstance.endUp();}
+                        else{setTimeout(this.botInstance.botMove.bind(this.botInstance),900);}
+                    }
+                }
+                else
+                {
+                    let clr = (gbInstance.currentColor==1) ? "黑子" : "白子";
+                    alert("未轮到您的回合，当前"+clr+"不可下");
+                }
+            }
+            else
+            {
+                if(gbInstance.digitalBoard.canSet(xPos,yPos,gbInstance.currentColor))
+                {
+                    gbInstance.digitalBoard.set(xPos,yPos,gbInstance.currentColor);
+                    gbInstance.renderState();
+                    if(gbInstance.isEndUp()) {gbInstance.endUp();}
+                    else{gbInstance.changeState();}
+                }
+            }
+        }
+    }
+</script>
+<style type="text/css">
+    canvas{ border: 1px solid black;}
+</style>
+</html>
+
