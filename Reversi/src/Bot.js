@@ -99,7 +99,7 @@ class bot
                 {
                     let ano = new board(this.gameBase.digitalBoard);
                     ano.set(i,j,this.currentColor);
-                    let res = this.Search(ano,this.gameBase.currentColor^1,2,6,evaluateFunction,l,100000000);
+                    let res = this.Search(ano,this.gameBase.currentColor^1,2,7,evaluateFunction,l,100000000);
                     if(res>maxres)
                     {
                         maxres = res;

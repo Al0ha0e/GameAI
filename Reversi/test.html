@@ -10,18 +10,11 @@
 <form>
     <h2>游戏设置</h2>
     <input type="checkbox" name="UseBot" onclick = "setBot(this);">人机模式
-    <select>
-            <option value="pvp">玩家对战玩家</option>
-            <option value="pve">玩家对战电脑</option>
-            <option value="eve">电脑对战电脑</option>
-    </select>
     <input type="checkbox" name="UseBlack" onclick="setFirst(this);">人类先手
-    计时器
-    <select>
-        <option value="one minute">一分钟</option>
-        <option value="two minutes">两分钟</option>
-        <option value="five minutes">五分钟</option>
-        <option value="infinity">不限时</option>
+    难度设置
+    <select id="difficulty">
+        <option value="naive">简单模式</option>
+        <option value="normal">普通模式</option>
     </select>
     <button type="button" onclick="restart();">重新开始</button>
     <br/>
@@ -45,6 +38,8 @@
         gbInstance.initGame(humanFirst ? "HumanTurn" : "BotTurn",usb,mtt);
         if(gbInstance.UseBot)
         {
+            this.botInstance.difficulty = document.getElementById("difficulty").value;
+            alert("模式"+document.getElementById("difficulty").value);
             if(!humanFirst) setTimeout(botInstance.botTurn.bind(this.botInstance),900); 
         }
     }
@@ -59,8 +54,8 @@
     function canvasOnClick(event)//main
     {
         let e = event || window.event;
-        let xPos = Math.floor(e.clientX/80);
-        let yPos = Math.floor(e.clientY/80)-2;
+        let xPos = Math.floor(e.pageX/80);
+        let yPos = Math.floor(e.pageY/80)-2;
         if(xPos>=0 && xPos<=7 && yPos>=0 && yPos<=7)
         {
             if(gbInstance.UseBot)
