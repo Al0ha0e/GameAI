@@ -23,6 +23,22 @@ class board
         this.digitalBoard[3][3] = this.digitalBoard[4][4] = 1;
         this.digitalBoard[3][4] = this.digitalBoard[4][3] = 0;
     }
+    stableTest(color)
+    {
+        let ret = 0;
+        if(this.digitalBoard[0][0]==color) ret++;
+        if(this.digitalBoard[0][7]==color) ret++;
+        if(this.digitalBoard[7][0]==color) ret++;
+        if(this.digitalBoard[7][7]==color) ret++;
+        let i,j;
+        for(i=0;i<8;i++)
+        {
+            for(j=0;j<8;j++)
+            {
+                if((i==0&&j==0)||(i==0&&j==0)||(i==0&&j==0)||(i==0&&j==0)) continue;
+            }
+        }
+    }
     canSet(xpos,ypos,color)
     {
         if(this.digitalBoard[xpos][ypos]!=-1) return false;
