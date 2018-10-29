@@ -6,14 +6,14 @@ class bot
         this.difficulty = difficulty;
         this.normalMaxDeep = 5;
         this.evaluateTable = [
-            [100,-60,10,10,10,10,-60,100],
+            [10000,-60,10,10,10,10,-60,10000],
             [-60,-80,5,5,5,5,-80,-60],
             [10,5,1,1,1,1,5,10],
             [10,5,1,1,1,1,5,10],
             [10,5,1,1,1,1,5,10],
             [10,5,1,1,1,1,5,10],
             [-60,-80,5,5,5,5,-80,-60],
-            [100,-60,10,10,10,10,-60,100]
+            [10000,-60,10,10,10,10,-60,10000]
         ];
     }
     botMove()
@@ -114,7 +114,7 @@ class bot
                 if(this.gameBase.digitalBoard.canSet(i,j,this.gameBase.currentColor))
                 {
                     let ano = new board(this.gameBase.digitalBoard);
-                    ano.set(i,j,this.currentColor);
+                    ano.set(i,j,this.gameBase.currentColor);
                     let res = this.Search(ano,this.gameBase.currentColor^1,2,7,evaluateFunction,l);
                     if(res>maxres)
                     {
@@ -169,6 +169,7 @@ class bot
                     ano.set(i,j,currentColor);
                     let res = this.Search(ano,currentColor^1,deep+1,maxdeep,evaluateFunction,l);
                     res += this.evaluateTable[i][j];
+                    res = res*0.5+ano.stableTest(currentColor)*0.5;//// a*EVA+b*STB
                     maxres = Math.max(maxres,res);
                     l = Math.max(l,maxres);
                     if(-l1<l) return -maxres;
@@ -179,3 +180,4 @@ class bot
         return -maxres;
     }
 }
+

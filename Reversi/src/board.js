@@ -30,14 +30,33 @@ class board
         if(this.digitalBoard[0][7]==color) ret++;
         if(this.digitalBoard[7][0]==color) ret++;
         if(this.digitalBoard[7][7]==color) ret++;
-        let i,j;
+        let i,j,k;
         for(i=0;i<8;i++)
         {
             for(j=0;j<8;j++)
             {
-                if((i==0&&j==0)||(i==0&&j==0)||(i==0&&j==0)||(i==0&&j==0)) continue;
+                if((i==0&&j==0)||(i==0&&j==7)||(i==7&&j==0)||(i==7&&j==7)) continue;
+                let flag = true;
+                if((j<7&&this.digitalBoard[i][j+1]==color^1)||j==7)//left
+                {for(k=1;j-k>=0;k++) {if(this.digitalBoard[i][j-k]==-1){flag = false;break;}}}
+                if(flag&&((j>0&&this.digitalBoard[i][j-1]==color^1)||j==0))//right
+                {for(k=1;j+k<8;k++) {if(this.digitalBoard[i][j+k]==-1){flag = false;break;}}}
+                if(flag&&((i<7&&this.digitalBoard[i+1][j]==color^1)||i==7))//up
+                {for(k=1;i-k>=0;k++) {if(this.digitalBoard[i-k][j]==-1){flag = false;break;}}}
+                if(flag&&((i>0&&this.digitalBoard[i-1][j]==color^1)||i==0))//down
+                {for(k=1;i+k<8;k++) {if(this.digitalBoard[i+k][j]==-1){flag = false;break;}}}
+                if(flag&&(i-1)>=0&&(j-1)>=0&&this.digitalBoard[i-1][j-1]==color^1)//rd
+                {for(k=1;i+k<8&&j+k<8;k++){if(this.digitalBoard[i+k][j+k]==-1){flag=false;break;}}}
+                if(flag&&i+1<8&&j+1<8&&this.digitalBoard[i+1][j+1]==color^1)//lu
+                {for(k=1;i-k>=0&&j-k>=0;k++){if(this.digitalBoard[i-k][j-k]==-1){flag=false;break;}}}
+                if(flag&&i-1>=0&&j+1<8&&this.digitalBoard[i-1][j+1]==color^1)//ld
+                {for(k=1;i+k<8&&j-k>=0;k++){if(this.digitalBoard[i+k][j-k]==-1){flag=false;break;}}}
+                if(flag&&i+1<8&&j-1>=0&&this.digitalBoard[i+1][j-1]==color^1)//ru
+                {for(k=1;i-k>=0&&j+k<8;k++){if(this.digitalBoard[i-k][j+k]==-1){flag=false;break;}}}
+                if(flag) ret++;
             }
         }
+        return ret;
     }
     canSet(xpos,ypos,color)
     {
